@@ -80,7 +80,7 @@ myStream.on('data', function(data){
 Node.JS buffers will be piped as they are, just like the primitive datatypes. This is not tested as thorougly as the other types, but should work properly. If not, please create an issue.
 
 ## Issues
-If you find any problems with this module, please [create an issue](https://github.com/INXCO/stream-magic/issues) so we can look into it. Pull requests with bugfixes are of course welcome.
+If you find any problems with this module, please [create an issue](https://github.com/INXCO/streammagic/issues) so we can look into it. Pull requests with bugfixes are of course welcome.
 
 ## License
 This module is licensed under the MIT License.
