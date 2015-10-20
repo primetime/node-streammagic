@@ -11,6 +11,9 @@
     "type": "git",
     "url": "https://github.com/INXCO/stream-magic.git"
   },
+  "bugs": {
+    "url": "https://github.com/INXCO/stream-magic/issues"
+  },
   "author": "Wouter Buckens <wouter.buckens@inxco.be>",
   "license": "MIT",
   "devDependencies": {
