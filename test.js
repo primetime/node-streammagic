@@ -1,6 +1,6 @@
-var chai, lipsum, mocha, streammagic, test_stream_data;
+var chai, lipsum, mocha, test_stream_data;
 
-streammagic = require('./')();
+require('./')();
 
 lipsum = require('simple-lipsum');
 

@@ -1,5 +1,5 @@
 # The module
-streammagic = do require './'
+do require './'
 
 # Third party modules
 lipsum = require('simple-lipsum')
