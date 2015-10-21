@@ -24,5 +24,6 @@
     "gulp-util": "^3.0.7",
     "mocha": "^2.3.3",
     "simple-lipsum": "^0.1.5"
-  }
+  },
+  "keywords": ["stream", "streams", "tostream", "convert", "string", "array", "object"]
 }
