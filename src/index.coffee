@@ -15,7 +15,7 @@ class Stream extends Readable
 					o = {}
 					o[i] = j
 					@data.push o
-			
+
 		else @data = data
 
 		Readable.call this, objectMode: yes
@@ -32,20 +32,32 @@ class Stream extends Readable
 			@push @data
 			@push null
 
-# Extend the prototypes
-module.exports = ->
+
+# Option 1: extend the prototypes
+extendPrototypes = ->
 
 	# Primitive types require .valueOf() to get their primitive value, otherwise they will be evaluated as objects
 	for i in [Boolean, Number, String]
 		Object.defineProperty i.prototype, 'toStream',
-			value: -> new Stream this.valueOf()
+			value: -> new Stream(this.valueOf())
 			writable: false
 			configurable: false
 			enumerable: false
 
 	for i in [Array, Buffer, Object]
 		Object.defineProperty i.prototype, 'toStream',
-			value: -> new Stream this
+			value: -> new Stream(this)
 			writable: false
 			configurable: false
 			enumerable: false
+
+
+# Option 2: safe wrapper
+safeWrapper = (data) ->
+	if typeof data in ['boolean', 'number', 'string']
+		return new Stream(data.valueOf())
+	else
+		return new Stream(data)
+
+module.exports = extendPrototypes
+module.exports.toStream = safeWrapper
