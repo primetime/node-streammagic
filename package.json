@@ -17,8 +17,8 @@
   "author": "Wouter Buckens <wouter.buckens@primetime.be>",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "^3.9.0",
-    "gulp-coffee": "^2.3.1",
+    "gulp": "^3.9.1",
+    "gulp-coffee": "^2.3.3",
     "gulp-plumber": "^1.1.0",
     "simple-lipsum": "^0.1.5",
     "tap": "^8.0.1"
