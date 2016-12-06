@@ -4,6 +4,8 @@ Converts any variable into a stream
 ## What it does
 Stream Magic extends the prototypes of all variable types within Node.JS with a `.toStream()` method, which lets you easily transform objects and variables into streams.
 
+A safe mode that doesn't extend prototypes is also available.
+
 #### Installation
 You can install Stream Magic using NPM
 
@@ -12,9 +14,9 @@ $ npm install streammagic
 ```
 
 #### Usage
-Essentially the entire module is just one function that attatches the `.toStream()` method to the prototypes. So to use it, simply require it and run the function once.
+Essentially the module is just one function that attatches the `.toStream()` method to the prototypes. So to use it, simply require it and run the function once.
 ```Javascript
-require('stream-magic')();
+require('streammagic')();
 ```
 
 Once this is done, the `.toStream()` method should be available on all variables.
@@ -27,6 +29,21 @@ myStream.pipe(process.stdout);
 
 // Or shorter
 'hello world'.toStream().pipe(process.stdout)
+```
+
+#### Safe mode
+The safe mode is available as a method of the module. Simply require it like this:
+
+```Javascript
+var toStream = require('streammagic').toStream;
+
+// Same as above
+var myString = 'hello world';
+var myStream = toStream(myString);
+myStream.pipe(process.stdout);
+
+// Short version
+toStream('hello world').pipe(process.stdout);
 ```
 
 ## Datatypes
