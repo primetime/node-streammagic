@@ -1,164 +1,248 @@
-# The module
-do require './'
+# Require the module
+streammagic = require('./')
 
-# Third party modules
+# Simple-lipsum to generate dummy content
 lipsum = require('simple-lipsum')
 
-# Testing libraries
-mocha = require 'mocha'
-chai = require 'chai'
-chai.should()
+# Testing library
+tap = require('tap')
 
 
-test_stream_data = (data, callback) ->
+# Helper function to test a stream
+testStream = (stream, callback) ->
 	result = []
-	data.toStream()
-		.on 'data', (data) -> result.push data
-		.on 'end', -> callback null, result
-		.on 'error', (err) -> callback err
+	stream.on 'data', (data) -> result.push data
+	stream.on 'end', -> callback null, result
+	stream.on 'error', (err) -> callback err
 
 
-describe 'String', ->
-	describe '"hello world"', ->
-		data = []
-		before (done) ->
-			test_stream_data 'hello world', (err, result) ->
-				return console.error err if err
-				data = result
-				do done
-
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be a string', -> data[0].should.be.a 'string'
-		it 'should contain "hello world"', -> data[0].should.equal 'hello world'
-
-	describe 'a paragraph of lorem ipsum', ->
-		data = []
-		before (done) ->
-			test_stream_data lipsum.getParagraph(20, 25), (err, result) ->
-				return console.error err if err
-				data = result
-				do done
-
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be a string', -> data[0].should.be.a 'string'
+# Test safe mode
+tap.test 'safe mode', (t) ->
 
 
-describe 'Number', ->
-	describe '7', ->
-		data = []
-		before (done) ->
-			test_stream_data 7, (err, result) ->
-				return console.error err if err
-				data = result
-				do done
+	t.test 'string', (t) ->
 
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be a number', -> data[0].should.be.a 'number'
-		it 'should equal 7', -> data[0].should.equal 7
+		t.test 'hello world', (t) ->
+			t.plan(3)
 
-	describe 'Math.random()', ->
-		data = []
-		before (done) ->
-			test_stream_data Math.random(), (err, result) ->
-				return console.error err if err
-				data = result
-				do done
+			stream = streammagic.toStream('hello world')
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.equals(data[0], 'hello world', 'should return hello world')
 
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be a number', -> data[0].should.be.a 'number'
+		t.test 'lorem ipsum', (t) ->
+			t.plan(3)
+
+			stream = streammagic.toStream(lipsum.getParagraph(20, 25))
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.type(data[0], 'string', 'should contain a string')
 
 
-describe 'Boolean', ->
-	describe 'true', ->
-		data = []
-		before (done) ->
-			test_stream_data true, (err, result) ->
-				return console.error err if err
-				data = result
-				do done
+	t.test 'number', (t) ->
 
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be a boolean', -> data[0].should.be.a 'boolean'
-		it 'should equal true', -> data[0].should.equal true
+		t.test '7', (t) ->
+			t.plan(3)
 
+			stream = streammagic.toStream(7)
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.equals(data[0], 7, 'should contain 7')
 
-describe 'Buffer', ->
-	describe 'new Buffer("hello world")', ->
-		data = []
-		before (done) ->
-			test_stream_data new Buffer('hello world'), (err, result) ->
-				return console.error err if err
-				data = result
-				do done
+		t.test 'random number', (t) ->
+			t.plan(3)
 
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be a buffer', -> Buffer.isBuffer(data[0]).should.equal yes
-		it 'should contain string value "hello world"', -> data[0].toString().should.equal 'hello world'
+			stream = streammagic.toStream(Math.random())
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.type(data[0], 'number', 'should contain a number')
 
 
-describe 'Object', ->
-	describe '{}', ->
-		data = []
-		before (done) ->
-			test_stream_data {}, (err, result) ->
-				return console.error err if err
-				data = result
-				do done
+	t.test 'boolean', (t) ->
+		t.plan(3)
 
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be undefined', -> (data[0] is undefined).should.equal yes
-
-	describe '{hello: "world"}', ->
-		data = []
-		before (done) ->
-			test_stream_data {hello: 'world'}, (err, result) ->
-				return console.error err if err
-				data = result
-				do done
-
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should have one property "hello"', -> data[0].should.have.property 'hello'
-
-	describe '{hello: "world", foo: "bar"}', ->
-		data = []
-		before (done) ->
-			test_stream_data {hello: 'world', foo: 'bar'}, (err, result) ->
-				return console.error err if err
-				data = result
-				do done
-
-		it 'should have two data events', -> data.length.should.equal 2
-
-		describe 'event 1', ->
-			it 'should have one property "hello" with value "world"', ->
-				data[0].should.have.property 'hello'
-				data[0].hello.should.equal 'world'
-		describe 'event 2', ->
-			it 'should have one property "foo" with value "bar"', ->
-				data[1].should.have.property 'foo'
-				data[1].foo.should.equal 'bar'
+		stream = streammagic.toStream(true)
+		testStream stream, (err, data) ->
+			t.error(err)
+			t.equals(data.length, 1, 'should have one data event')
+			t.equals(data[0], true, 'should contain true')
 
 
-describe 'Array', ->
-	describe '[]', ->
-		data = []
-		before (done) ->
-			test_stream_data [], (err, result) ->
-				return console.error err if err
-				data = result
-				do done
+	t.test 'buffer', (t) ->
+		t.plan(4)
 
-		it 'should have one data event', -> data.length.should.equal 1
-		it 'should be undefined', -> (data[0] is undefined).should.equal yes
+		stream = streammagic.toStream(new Buffer('hello world'))
+		testStream stream, (err, data) ->
+			t.error(err)
+			t.equals(data.length, 1, 'should have one data event')
+			t.true(Buffer.isBuffer(data[0]), 'should be a buffer')
+			t.equals(data[0].toString(), 'hello world', 'should contain hello world')
 
-	describe '["hello", "world"]', ->
-		data = []
-		before (done) ->
-			test_stream_data ['hello', 'world'], (err, result) ->
-				return console.error err if err
-				data = result
-				do done
 
-		it 'should have two data events', -> data.length.should.equal 2
-		describe 'event 1', -> it 'should be "hello"', -> data[0].should.equal 'hello'
-		describe 'event 2', -> it 'should be "world"', -> data[1].should.equal 'world'
+	t.test 'object', (t) ->
+
+		t.test 'empty object', (t) ->
+			t.plan(3)
+
+			t.comment('{}')
+			stream = streammagic.toStream({})
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.equals(data[0], undefined, 'should contain undefined')
+
+
+		t.test 'hello world object', (t) ->
+			t.plan(4)
+
+			t.comment('{hello: world, foo: bar}')
+			stream = streammagic.toStream(hello: 'world', foo: 'bar')
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 2, 'should have two data events')
+				t.same(data[0], (hello: 'world'), 'should contain {hello: world} in first value')
+				t.same(data[1], (foo: 'bar'), 'should contain {foo: bar} in second value')
+
+
+		t.test 'array', (t) ->
+
+			t.test 'empty array', (t) ->
+				t.plan(3)
+
+				t.comment('[]')
+				stream = streammagic.toStream([])
+				testStream stream, (err, data) ->
+					t.error(err)
+					t.equals(data.length, 1, 'should have one data event')
+					t.equals(data[0], undefined, 'should contain undefined')
+
+			t.test 'hello world array', (t) ->
+				t.plan(4)
+
+				t.comment('[hello, world]')
+				stream = streammagic.toStream(['hello', 'world'])
+				testStream stream, (err, data) ->
+					t.error(err)
+					t.equals(data.length, 2, 'should have two data events')
+					t.equals(data[0], 'hello', 'should contain hello in first value')
+					t.equals(data[1], 'world', 'should contain world in second value')
+
+
+# Extend prototypes
+tap.test 'extend prototype', (t) ->
+	do streammagic
+
+	t.test 'string', (t) ->
+
+		t.test 'hello world', (t) ->
+			t.plan(3)
+
+			stream = 'hello world'.toStream()
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.equals(data[0], 'hello world', 'should return hello world')
+
+		t.test 'lorem ipsum', (t) ->
+			t.plan(3)
+
+			stream = lipsum.getParagraph(20, 25).toStream()
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.type(data[0], 'string', 'should contain a string')
+
+
+	t.test 'number', (t) ->
+
+		t.test '7', (t) ->
+			t.plan(3)
+
+			stream = 7.toStream()
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.equals(data[0], 7, 'should contain 7')
+
+		t.test 'random number', (t) ->
+			t.plan(3)
+
+			stream = Math.random().toStream()
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.type(data[0], 'number', 'should contain a number')
+
+
+	t.test 'boolean', (t) ->
+		t.plan(3)
+
+		stream = true.toStream()
+		testStream stream, (err, data) ->
+			t.error(err)
+			t.equals(data.length, 1, 'should have one data event')
+			t.equals(data[0], true, 'should contain true')
+
+
+	t.test 'buffer', (t) ->
+		t.plan(4)
+
+		stream = new Buffer('hello world').toStream()
+		testStream stream, (err, data) ->
+			t.error(err)
+			t.equals(data.length, 1, 'should have one data event')
+			t.true(Buffer.isBuffer(data[0]), 'should be a buffer')
+			t.equals(data[0].toString(), 'hello world', 'should contain hello world')
+
+
+	t.test 'object', (t) ->
+
+		t.test 'empty object', (t) ->
+			t.plan(3)
+
+			t.comment('{}')
+			stream = {}.toStream()
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 1, 'should have one data event')
+				t.equals(data[0], undefined, 'should contain undefined')
+
+
+		t.test 'hello world object', (t) ->
+			t.plan(4)
+
+			t.comment('{hello: world, foo: bar}')
+			stream = (hello: 'world', foo: 'bar').toStream()
+			testStream stream, (err, data) ->
+				t.error(err)
+				t.equals(data.length, 2, 'should have two data events')
+				t.same(data[0], (hello: 'world'), 'should contain {hello: world} in first value')
+				t.same(data[1], (foo: 'bar'), 'should contain {foo: bar} in second value')
+
+
+		t.test 'array', (t) ->
+
+			t.test 'empty array', (t) ->
+				t.plan(3)
+
+				t.comment('[]')
+				stream = [].toStream()
+				testStream stream, (err, data) ->
+					t.error(err)
+					t.equals(data.length, 1, 'should have one data event')
+					t.equals(data[0], undefined, 'should contain undefined')
+
+			t.test 'hello world array', (t) ->
+				t.plan(4)
+
+				t.comment('[hello, world]')
+				stream = ['hello', 'world'].toStream()
+				testStream stream, (err, data) ->
+					t.error(err)
+					t.equals(data.length, 2, 'should have two data events')
+					t.equals(data[0], 'hello', 'should contain hello in first value')
+					t.equals(data[1], 'world', 'should contain world in second value')

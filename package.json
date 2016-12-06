@@ -4,7 +4,7 @@
   "description": "Convert anything to a stream",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/mocha/bin/mocha",
+    "test": "node node_modules/gulp/bin/gulp compile --silent && node test.js",
     "prepublish": "node node_modules/gulp/bin/gulp compile"
   },
   "repository": {
@@ -17,12 +17,19 @@
   "author": "Wouter Buckens <wouter.buckens@primetime.be>",
   "license": "MIT",
   "devDependencies": {
-    "chai": "^3.3.0",
     "gulp": "^3.9.0",
     "gulp-coffee": "^2.3.1",
-    "mocha": "^2.3.3",
     "gulp-plumber": "^1.1.0",
-    "simple-lipsum": "^0.1.5"
+    "simple-lipsum": "^0.1.5",
+    "tap": "^8.0.1"
   },
-  "keywords": ["stream", "streams", "tostream", "convert", "string", "array", "object"]
+  "keywords": [
+    "stream",
+    "streams",
+    "tostream",
+    "convert",
+    "string",
+    "array",
+    "object"
+  ]
 }
