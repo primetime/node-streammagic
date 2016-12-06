@@ -1,0 +1,5 @@
+# When publishing to npm, ignore all files in the directory except the ones required for the module to work (in this case, only index.js)
+# package.json, readme.md, license.txt are never excluded so no need to explicitly include them again - see https://docs.npmjs.com/misc/developers
+
+*
+!index.js
