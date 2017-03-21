@@ -7,7 +7,7 @@ gulp.task('compile', function(){
 	gulp.src('./src/*.coffee')
 		.pipe(plumber())
 		.pipe(coffee({bare: true}))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./dist'));
 });
 
 // Watches for file changes

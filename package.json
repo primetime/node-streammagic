@@ -2,27 +2,28 @@
   "name": "streammagic",
   "version": "0.3.0",
   "description": "Convert anything to a stream",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "node node_modules/gulp/bin/gulp compile --silent && node test.js",
+	"start": "node node_modules/gulp/bin/gulp",
+    "test": "node node_modules/gulp/bin/gulp compile --silent && node dist/test.js",
     "prepublish": "node node_modules/gulp/bin/gulp compile",
     "preversion": "npm test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/INXCO/streammagic.git"
+    "url": "https://github.com/INXCO/node-streammagic.git"
   },
   "bugs": {
-    "url": "https://github.com/INXCO/streammagic/issues"
+    "url": "https://github.com/INXCO/node-streammagic/issues"
   },
   "author": "Wouter Buckens <wouter.buckens@primetime.be>",
   "license": "MIT",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-coffee": "^2.3.3",
+    "gulp-coffee": "^2.3.4",
     "gulp-plumber": "^1.1.0",
     "simple-lipsum": "^0.1.5",
-    "tap": "^8.0.1"
+    "tap": "^10.3.0"
   },
   "keywords": [
     "stream",
