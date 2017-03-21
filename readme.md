@@ -56,7 +56,7 @@ All primitive datatypes (number, boolean, string) will be pushed to the stream i
 var stream = false.toStream() // stream.on('data') will contain: false
 
 // Number
-var stream = 35.toStream() // stream.on('data') will contain: 35
+var stream = (35).toStream() // stream.on('data') will contain: 35
 
 // String
 var stream = 'foo'.toStream() // stream.on('data') will contain: foo
@@ -105,7 +105,7 @@ myStream.on('data', function(data){
 ```
 
 #### Buffers
-Node.JS buffers will be piped as they are, just like the primitive datatypes. This is not tested as thorougly as the other types, but should work properly. If not, please create an issue.
+Node buffers will be piped as they are, just like primitive datatypes.
 
 ## Issues
 If you find any problems with this module, please [create an issue](https://github.com/INXCO/streammagic/issues) so we can look into it. Pull requests with bugfixes are of course welcome.
