@@ -11,10 +11,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/INXCO/node-streammagic.git"
+    "url": "https://github.com/primetime/node-streammagic.git"
   },
   "bugs": {
-    "url": "https://github.com/INXCO/node-streammagic/issues"
+    "url": "https://github.com/primetime/node-streammagic/issues"
   },
   "author": "Wouter Buckens <wouter.buckens@primetime.be>",
   "license": "MIT",
