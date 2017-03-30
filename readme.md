@@ -1,11 +1,11 @@
 # Stream Magic
-Converts any variable into a stream
-
 [![Build Status](https://semaphoreci.com/api/v1/primetime/node-streammagic/branches/master/shields_badge.svg)](https://semaphoreci.com/primetime/node-streammagic)
 [![npm](https://img.shields.io/npm/v/streammagic.svg)](https://www.npm.com/package/streammagic)
 [![GitHub issues](https://img.shields.io/github/issues/primetime/node-streammagic.svg)](https://github.com/primetime/node-streammagic/issues)
 [![Known Vulnerabilities](https://snyk.io/test/github/primetime/node-streammagic/badge.svg)](https://snyk.io/test/github/primetime/node-streammagic)
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/primetime/node-streammagic/master/license.txt)
+
+A simple module that can convert any variable into a Node.js stream
 
 ## What it does
 Stream Magic extends the prototypes of all variable types within Node.JS with a `.toStream()` method, which lets you easily transform objects and variables into streams.
@@ -13,15 +13,16 @@ Stream Magic extends the prototypes of all variable types within Node.JS with a 
 A safe mode that doesn't extend prototypes is also available.
 
 #### Installation
-You can install Stream Magic using NPM
+You can install the [streammagic](https://www.npmjs.com/package/streammagic) package using npm.
 
 ```
 $ npm install streammagic
 ```
 
 #### Usage
-Essentially the module is just one function that attatches the `.toStream()` method to the prototypes. So to use it, simply require it and run the function once.
+The module exports a single function that attaches the `.toStream()` method to the prototypes. To use it, simply require the module and run the function once.
 ```Javascript
+// No need to assign this as the function doesn't return anything
 require('streammagic')();
 ```
 
@@ -29,8 +30,8 @@ Once this is done, the `.toStream()` method should be available on all variables
 
 ```Javascript
 // Logs 'hello world' to stdout (the console)
-var myString = 'hello world';
-var myStream = myString.toStream();
+let myString = 'hello world';
+let myStream = myString.toStream();
 myStream.pipe(process.stdout);
 
 // Or shorter
@@ -41,11 +42,11 @@ myStream.pipe(process.stdout);
 The safe mode is available as a method of the module. Simply require it like this:
 
 ```Javascript
-var toStream = require('streammagic').toStream;
+const toStream = require('streammagic').toStream;
 
 // Same as above
-var myString = 'hello world';
-var myStream = toStream(myString);
+let myString = 'hello world';
+let myStream = toStream(myString);
 myStream.pipe(process.stdout);
 
 // Short version
@@ -59,22 +60,22 @@ All primitive datatypes (number, boolean, string) will be pushed to the stream i
 
 ```Javascript
 // Boolean
-var stream = false.toStream() // stream.on('data') will contain: false
+let stream = false.toStream() // stream.on('data') will contain: false
 
 // Number
-var stream = (35).toStream() // stream.on('data') will contain: 35
+let stream = (35).toStream() // stream.on('data') will contain: 35
 
 // String
-var stream = 'foo'.toStream() // stream.on('data') will contain: foo
+let stream = 'foo'.toStream() // stream.on('data') will contain: foo
 ```
 
 
 #### Arrays
-Arrays will be piped one item at a time. This can be useful e.g. for processing large sets of data.
+Arrays will be piped one item at a time. This can be useful for processing datasets.
 
 ```Javascript
-var myArray = ['hello', 'world'];
-var myStream = myArray.toStream();
+let myArray = ['hello', 'world'];
+let myStream = myArray.toStream();
 
 myStream.on('data', function(data){
 	// The data event will fire twice. Data will contain 'hello' the first time, 'world' the second.
@@ -86,24 +87,24 @@ myStream.on('data', function(data){
 Objects are piped one property at a time as `{key: value}` objects. Keep this in mind, as assembling the original object on the other end of the pipe will require some manual work.
 
 ```Javascript
-var myObject = {
+let myObject = {
 	hello: 'world',
 	foo: 'bar'
 };
-var myStream = myObject.toStream();
+let myStream = myObject.toStream();
 
 myStream.on('data', function(data){
 	// The data event will fire twice. Data will contain {hello: 'world'} the first time, {foo: 'bar'} the second.
 });
 ```
 
-###### Hint
+###### Tip
 
 If you need an object or an array to be piped as one instead of being split up, you can simply wrap it inside another array. Only the outermost array or object will be split.
 
 ```Javascript
-var myArray = ['hello', 'world'];
-var myStream = [myArray].toStream();
+let myArray = ['hello', 'world'];
+let myStream = [myArray].toStream();
 
 myStream.on('data', function(data){
 	console.log(data); // ['hello', 'world']
@@ -114,7 +115,7 @@ myStream.on('data', function(data){
 Node buffers will be piped as they are, just like primitive datatypes.
 
 ## Issues
-If you find any problems with this module, please [create an issue](https://github.com/primetime/node-streammagic/issues) so we can look into it. Pull requests with bugfixes are of course welcome.
+If you find any bugs or problems with this module, please [create an issue](https://github.com/primetime/node-streammagic/issues) so we can look into it. Pull requests with bugfixes are of course welcome.
 
 ## License
-This module is licensed under the MIT License.
+This module is licensed under the [MIT License](https://github.com/primetime/node-streammagic/blob/master/license.txt).
