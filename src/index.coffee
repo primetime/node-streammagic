@@ -51,6 +51,9 @@ extendPrototypes = ->
 			configurable: false
 			enumerable: false
 
+	# Return a simple true value (this shouldn't be assigned to anything)
+	return true
+
 
 # Option 2: safe wrapper
 safeWrapper = (data) ->
