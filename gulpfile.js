@@ -1,6 +1,8 @@
-var gulp = require('gulp');
-var coffee = require('gulp-coffee');
-var plumber = require('gulp-plumber');
+const gulp = require('gulp');
+const plumber = require('gulp-plumber');
+
+const coffee = require('gulp-coffee');
+
 
 // Compiles coffeescript to javascript
 gulp.task('compile', function(){
@@ -9,6 +11,7 @@ gulp.task('compile', function(){
 		.pipe(coffee({bare: true}))
 		.pipe(gulp.dest('./dist'));
 });
+
 
 // Watches for file changes
 gulp.task('default', ['compile'], function(){

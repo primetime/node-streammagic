@@ -4,8 +4,11 @@
   "description": "Convert anything to a stream",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node node_modules/gulp/bin/gulp",
-    "test": "node node_modules/gulp/bin/gulp compile --silent && node dist/test.js",
+    "start": "node node_modules/.bin/gulp",
+
+    "pretest": "node node_modules/.bin/gulp compile --silent",
+    "test": "node_modules/.bin/tap dist/test.js --coverage",
+
     "prepublish": "node node_modules/gulp/bin/gulp compile",
     "preversion": "npm test"
   },
