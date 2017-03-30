@@ -1,7 +1,11 @@
 # Stream Magic
 Converts any variable into a stream
 
-[![Build Status](https://semaphoreci.com/api/v1/primetime/node-streammagic/branches/master/badge.svg)](https://semaphoreci.com/primetime/node-streammagic)
+[![Build Status](https://semaphoreci.com/api/v1/primetime/node-streammagic/branches/master/shields_badge.svg)](https://semaphoreci.com/primetime/node-streammagic)
+[![npm](https://img.shields.io/npm/v/streammagic.svg)](https://www.npm.com/package/streammagic)
+[![GitHub issues](https://img.shields.io/github/issues/primetime/node-streammagic.svg)](https://github.com/primetime/node-streammagic/issues)
+[![Known Vulnerabilities](https://snyk.io/test/github/primetime/node-streammagic/badge.svg)](https://snyk.io/test/github/primetime/node-streammagic)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/primetime/node-streammagic/master/license.txt)
 
 ## What it does
 Stream Magic extends the prototypes of all variable types within Node.JS with a `.toStream()` method, which lets you easily transform objects and variables into streams.
